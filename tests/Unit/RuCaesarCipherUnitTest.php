@@ -4,6 +4,7 @@ namespace Dezer32\Cipher\Caesar\Tests\Unit;
 
 use Dezer32\Cipher\Caesar\Contracts\LanguageCaesarCipherInterface;
 use Dezer32\Cipher\Caesar\Enum\CaseStrategy;
+use Dezer32\Cipher\Caesar\Enum\Language;
 use Dezer32\Cipher\Caesar\RuCaesarCipher;
 
 class RuCaesarCipherUnitTest extends UnitTestCase
@@ -143,6 +144,16 @@ class RuCaesarCipherUnitTest extends UnitTestCase
             CaseStrategy::STRICT_CASE,
             'Нама мыла раму.',
         ];
+    }
+
+    public function testSuccessLanguage(): void
+    {
+        self::assertSame(Language::RU, $this->caesarCipher->getLanguage());
+    }
+
+    public function testSuccessAbc(): void
+    {
+        self::assertSame('абвгдеёжзийклмнопрстуфхцчшщъыьэюя', $this->caesarCipher->getAbc());
     }
 
     protected function setUp(): void

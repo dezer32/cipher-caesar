@@ -5,7 +5,7 @@ namespace Dezer32\Cipher\Caesar\Tests\Unit;
 use Dezer32\Cipher\Caesar\Contracts\LanguageCaesarCipherInterface;
 use Dezer32\Cipher\Caesar\EnCaesarCipher;
 use Dezer32\Cipher\Caesar\Enum\CaseStrategy;
-use Dezer32\Cipher\Caesar\RuCaesarCipher;
+use Dezer32\Cipher\Caesar\Enum\Language;
 
 class EnCaesarCipherUnitTest extends UnitTestCase
 {
@@ -144,6 +144,16 @@ class EnCaesarCipherUnitTest extends UnitTestCase
             CaseStrategy::STRICT_CASE,
             'Nom washed the frame.',
         ];
+    }
+
+    public function testSuccessLanguage(): void
+    {
+        self::assertSame(Language::EN, $this->caesarCipher->getLanguage());
+    }
+
+    public function testSuccessAbc(): void
+    {
+        self::assertSame('abcdefghijklmnopqrstuvwxyz', $this->caesarCipher->getAbc());
     }
 
     protected function setUp(): void
