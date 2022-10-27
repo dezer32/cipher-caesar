@@ -4,6 +4,7 @@ namespace Dezer32\Cipher\Caesar\Tests\Unit;
 
 use Dezer32\Cipher\Caesar\Contracts\LanguageCaesarCipherInterface;
 use Dezer32\Cipher\Caesar\EnCaesarCipher;
+use Dezer32\Cipher\Caesar\Enum\CaseStrategy;
 use Dezer32\Cipher\Caesar\RuCaesarCipher;
 
 class EnCaesarCipherUnitTest extends UnitTestCase
@@ -74,6 +75,74 @@ class EnCaesarCipherUnitTest extends UnitTestCase
             'Mom washed the frame.',
             27,
             'Npn xbtife uif gsbnf.',
+        ];
+    }
+
+    /** @dataProvider encodeUseCaseStrategyDataProvider */
+    public function testSuccessCanEncodeUseCaseStrategy(
+        string $string,
+        int $key,
+        CaseStrategy $caseStrategy,
+        string $expectedString
+    ): void {
+        $encodedString = $this->caesarCipher->encode($string, $key, $caseStrategy);
+
+        self::assertSame($expectedString, $encodedString);
+    }
+
+    public function encodeUseCaseStrategyDataProvider(): iterable
+    {
+        yield [
+            'Mom washed the frame.',
+            1,
+            CaseStrategy::MAINTAIN_CASE,
+            'Npn xbtife uif gsbnf.',
+        ];
+        yield [
+            'Mom washed the frame.',
+            1,
+            CaseStrategy::IGNORE_CASE,
+            'npn xbtife uif gsbnf.',
+        ];
+        yield [
+            'Mom washed the frame.',
+            1,
+            CaseStrategy::STRICT_CASE,
+            'Mpn xbtife uif gsbnf.',
+        ];
+    }
+
+    /** @dataProvider decodeUseCaseStrategyDataProvider */
+    public function testSuccessCanDecodeUseCaseStrategy(
+        string $string,
+        int $key,
+        CaseStrategy $caseStrategy,
+        string $expectedString
+    ): void {
+        $encodedString = $this->caesarCipher->decode($string, $key, $caseStrategy);
+
+        self::assertSame($expectedString, $encodedString);
+    }
+
+    public function decodeUseCaseStrategyDataProvider(): iterable
+    {
+        yield [
+            'Npn xbtife uif gsbnf.',
+            1,
+            CaseStrategy::MAINTAIN_CASE,
+            'Mom washed the frame.',
+        ];
+        yield [
+            'Npn xbtife uif gsbnf.',
+            1,
+            CaseStrategy::IGNORE_CASE,
+            'mom washed the frame.',
+        ];
+        yield [
+            'Npn xbtife uif gsbnf.',
+            1,
+            CaseStrategy::STRICT_CASE,
+            'Nom washed the frame.',
         ];
     }
 

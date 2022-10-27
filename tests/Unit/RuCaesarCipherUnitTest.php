@@ -3,6 +3,7 @@
 namespace Dezer32\Cipher\Caesar\Tests\Unit;
 
 use Dezer32\Cipher\Caesar\Contracts\LanguageCaesarCipherInterface;
+use Dezer32\Cipher\Caesar\Enum\CaseStrategy;
 use Dezer32\Cipher\Caesar\RuCaesarCipher;
 
 class RuCaesarCipherUnitTest extends UnitTestCase
@@ -73,6 +74,74 @@ class RuCaesarCipherUnitTest extends UnitTestCase
             'Мама мыла раму.',
             34,
             'Нбнб ньмб сбнф.',
+        ];
+    }
+
+    /** @dataProvider encodeUseCaseStrategyDataProvider */
+    public function testSuccessCanEncodeUseCaseStrategy(
+        string $string,
+        int $key,
+        CaseStrategy $caseStrategy,
+        string $expectedString
+    ): void {
+        $encodedString = $this->caesarCipher->encode($string, $key, $caseStrategy);
+
+        self::assertSame($expectedString, $encodedString);
+    }
+
+    public function encodeUseCaseStrategyDataProvider(): iterable
+    {
+        yield [
+            'Мама мыла раму.',
+            1,
+            CaseStrategy::MAINTAIN_CASE,
+            'Нбнб ньмб сбнф.',
+        ];
+        yield [
+            'Мама мыла раму.',
+            1,
+            CaseStrategy::IGNORE_CASE,
+            'нбнб ньмб сбнф.',
+        ];
+        yield [
+            'Мама мыла раму.',
+            1,
+            CaseStrategy::STRICT_CASE,
+            'Мбнб ньмб сбнф.',
+        ];
+    }
+
+    /** @dataProvider decodeUseCaseStrategyDataProvider */
+    public function testSuccessCanDecodeUseCaseStrategy(
+        string $string,
+        int $key,
+        CaseStrategy $caseStrategy,
+        string $expectedString
+    ): void {
+        $encodedString = $this->caesarCipher->decode($string, $key, $caseStrategy);
+
+        self::assertSame($expectedString, $encodedString);
+    }
+
+    public function decodeUseCaseStrategyDataProvider(): iterable
+    {
+        yield [
+            'Нбнб ньмб сбнф.',
+            1,
+            CaseStrategy::MAINTAIN_CASE,
+            'Мама мыла раму.',
+        ];
+        yield [
+            'Нбнб ньмб сбнф.',
+            1,
+            CaseStrategy::IGNORE_CASE,
+            'мама мыла раму.',
+        ];
+        yield [
+            'Нбнб ньмб сбнф.',
+            1,
+            CaseStrategy::STRICT_CASE,
+            'Нама мыла раму.',
         ];
     }
 
