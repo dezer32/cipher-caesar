@@ -5,6 +5,7 @@ namespace Dezer32\Cipher\Caesar;
 use Dezer32\Cipher\Caesar\Contracts\LanguageCaesarCipherInterface;
 use Dezer32\Cipher\Caesar\Enum\CaseStrategy;
 use Dezer32\Cipher\Caesar\Exceptions\UnexpectedSymbolCaesarException;
+use Dezer32\Cipher\Caesar\Helpers\ImplodeChunksCaesarHelper;
 
 abstract class AbstractLanguageCaesarCipher implements LanguageCaesarCipherInterface
 {
@@ -24,7 +25,7 @@ abstract class AbstractLanguageCaesarCipher implements LanguageCaesarCipherInter
             }
         }
 
-        return $this->implodeChunks($chunks, $string, $caseStrategy);
+        return ImplodeChunksCaesarHelper::make()->implodes($chunks, $string, $caseStrategy);
     }
 
     public function decode(
@@ -42,7 +43,7 @@ abstract class AbstractLanguageCaesarCipher implements LanguageCaesarCipherInter
             }
         }
 
-        return $this->implodeChunks($chunks, $string, $caseStrategy);
+        return ImplodeChunksCaesarHelper::make()->implodes($chunks, $string, $caseStrategy);
     }
 
     private function splitString(string $string): array
@@ -50,25 +51,6 @@ abstract class AbstractLanguageCaesarCipher implements LanguageCaesarCipherInter
         $lowerString = mb_strtolower($string);
 
         return mb_str_split($lowerString);
-    }
-
-    private function chunksCaseStrategy(
-        array $chunks,
-        string $string,
-        CaseStrategy $caseStrategy
-    ): array {
-        return match ($caseStrategy) {
-            CaseStrategy::MAINTAIN_CASE => $this->maintainCase($chunks, $string),
-            CaseStrategy::IGNORE_CASE => $chunks,
-            CaseStrategy::STRICT_CASE => $this->strictCase($chunks, $string)
-        };
-    }
-
-    private function implodeChunks(array $chunks, string $string, CaseStrategy $caseStrategy): string
-    {
-        $chunksCaseStrategy = $this->chunksCaseStrategy($chunks, $string, $caseStrategy);
-
-        return implode('', $chunksCaseStrategy);
     }
 
     /**
@@ -108,36 +90,6 @@ abstract class AbstractLanguageCaesarCipher implements LanguageCaesarCipherInter
     private function getAbcPower(): int
     {
         return mb_strlen($this->getAbc());
-    }
-
-    private function maintainCase(array $chunks, string $string): array
-    {
-        return array_map(
-            static function (string $encodedChar, string $char): string {
-                if ($char === mb_strtoupper($char)) {
-                    $encodedChar = mb_strtoupper($encodedChar);
-                }
-
-                return $encodedChar;
-            },
-            $chunks,
-            mb_str_split($string)
-        );
-    }
-
-    private function strictCase(array $chunks, string $string): array
-    {
-        return array_map(
-            static function (string $encodedChar, string $char): string {
-                if ($char === mb_strtoupper($char)) {
-                    $encodedChar = $char;
-                }
-
-                return $encodedChar;
-            },
-            $chunks,
-            mb_str_split($string)
-        );
     }
 
     /**
