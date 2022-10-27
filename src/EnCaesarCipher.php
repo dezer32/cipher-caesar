@@ -4,9 +4,9 @@ namespace Dezer32\Cipher\Caesar;
 
 use Dezer32\Cipher\Caesar\Enum\Language;
 
-class RuCaesarCipher extends AbstractLanguageCaesarCipher
+class EnCaesarCipher extends AbstractLanguageCaesarCipher
 {
-    private const ABC = 'абвгдеёжзийклмнопрстуфхцчшщъыьэюя';
+    private const ABC = 'abcdefghijklmnopqrstuvwxyz';
 
     public function getAbc(): string
     {
@@ -15,6 +15,6 @@ class RuCaesarCipher extends AbstractLanguageCaesarCipher
 
     public function getLanguage(): Language
     {
-        return Language::RU;
+        return Language::EN;
     }
 }
