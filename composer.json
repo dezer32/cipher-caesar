@@ -1,0 +1,31 @@
+{
+	"name": "dezer32/cipher-caesar",
+	"description": "Library for encode/decode cipher Caesar.",
+	"type": "library",
+	"license": "MIT",
+	"autoload": {
+		"psr-4": {
+			"Dezer32\\Cipher\\Caesar\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Dezer32\\Cipher\\Caesar\\Tests\\": "tests/"
+		}
+	},
+	"authors": [
+		{
+			"name": "Dezer",
+			"email": "i@appdevelop.ru"
+		}
+	],
+	"minimum-stability": "stable",
+	"require": {
+		"php": ">=8.1",
+		"ext-mbstring": "*"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "^9.5",
+		"fakerphp/faker": "^1.20"
+	}
+}
